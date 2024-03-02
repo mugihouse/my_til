@@ -32,6 +32,9 @@
 # Ignore master key for decrypting credentials and more.
 /backend/config/master.key
 
+# local env files
+/backend/.env
+
 
 # frontend
 

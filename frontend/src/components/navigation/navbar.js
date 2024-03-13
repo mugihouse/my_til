@@ -29,6 +29,9 @@ const NavBar = () => {
           <Button color="inherit">
             <Link href="/login">LOGIN</Link>
           </Button>
+          <Button color="inherit">
+            <Link href="/sign-up">SIGNUP</Link>
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>

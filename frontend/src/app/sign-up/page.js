@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const Login = () => {
+const SignUp = () => {
   const router = useRouter();
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -31,9 +31,11 @@ const Login = () => {
       setIsError(false);
       setErrorMessage("");
       return await axiosInstance
-        .post("auth/sign_in", {
+        .post("auth", {
+          name: data.get("name"),
           email: data.get("email"),
           password: data.get("password"),
+          password_confirmation: data.get("password_confirmation"),
         })
         .then(function (response) {
           // Cookieにトークンをセットしています
@@ -64,7 +66,7 @@ const Login = () => {
           align="center"
           sx={{ pt: 3, mp: 2 }}
         >
-          ログイン
+          新規登録
         </Typography>
         <Box
           component="form"
@@ -77,6 +79,15 @@ const Login = () => {
             pb: 4,
           }}
         >
+          <TextField
+            id="name"
+            label="名前"
+            name="name"
+            variant="standard"
+            autoFocus
+            required
+            fullWidth
+          />
           <TextField
             id="email"
             label="メールアドレス"
@@ -97,8 +108,18 @@ const Login = () => {
             required
             fullWidth
           />
+          <TextField
+            name="password_confirmation"
+            label="パスワード（確認用）"
+            type="password"
+            id="password_confirmation"
+            variant="standard"
+            autoComplete="current-password"
+            required
+            fullWidth
+          />
           <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-            ログイン
+            登録
           </Button>
           {isError ? (
             <Alert
@@ -117,4 +138,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

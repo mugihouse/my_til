@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { withAuthServerSideProps } from "../../../lib/auth";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -13,7 +14,15 @@ const Mypage = () => {
   //   alert(arg.dateStr);
   // };
 
-  const name = Cookies.get("name").trim();
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const name = await Cookies.get("name");
+      setName(name);
+    };
+    fetchData();
+  }, []);
 
   return (
     <>

@@ -40,6 +40,7 @@ const Login = () => {
           Cookies.set("uid", response.headers["uid"]);
           Cookies.set("client", response.headers["client"]);
           Cookies.set("access-token", response.headers["access-token"]);
+          Cookies.set("name", response.data.data.name);
           router.push("/mypage");
         })
         .catch(function (error) {
@@ -47,6 +48,7 @@ const Login = () => {
           Cookies.remove("uid");
           Cookies.remove("client");
           Cookies.remove("access-token");
+          Cookies.remove("name");
           setIsError(true);
           setErrorMessage(error.response.data.errors[0]);
         });

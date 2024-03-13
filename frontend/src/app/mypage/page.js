@@ -5,6 +5,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const Mypage = () => {
   withAuthServerSideProps("/api/v1/mypage");
@@ -12,9 +13,12 @@ const Mypage = () => {
   //   alert(arg.dateStr);
   // };
 
+  const name = Cookies.get("name").trim();
+
   return (
     <>
       <div>
+        <div>ユーザー名：{name}</div>
         <div className="calendar-container px-12 py-10">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}

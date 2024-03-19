@@ -22,7 +22,7 @@ const Sidemenu = () => {
         <ListItemIcon>
           <ArticleOutlinedIcon />
         </ListItemIcon>
-        <Link href="/article/edit">New Article</Link>
+        <Link href="/article/edit">Edit Article</Link>
       </ListItemButton>
       <ListItemButton>
         <ListItemText primary="Drafts" />

@@ -45,6 +45,9 @@ const NavBar = () => {
           <Button color="inherit">
             <Link href="/sign-up">SIGNUP</Link>
           </Button>
+          <Button color="inherit">
+            <Link href="/article/new">New Article</Link>
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer open={open} onClose={toggleDrawer}>

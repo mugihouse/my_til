@@ -18,6 +18,29 @@ class Api::V1::ArticlesController < ApplicationController
     end
   end
 
+  def edit
+    article = Article.find(params[:id])
+    if article
+      article_hash = {
+        id: article.id,
+        title: article.title,
+        content: article.content,
+      }
+      render json: article_hash, status: :ok
+    end
+  end
+
+  def update
+    article = Article.find(params[:id])
+
+    if article.update(article_params)
+      render  status: :ok
+    else
+      render json: { message: '更新出来ませんでした', errors: article.errors.messages }, status: :bad_request
+    end
+  end
+
+
   def show
     article = Article.find(params[:id])
     if article

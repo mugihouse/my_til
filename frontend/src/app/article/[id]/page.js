@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Typography, IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { cb } from "react-syntax-highlighter/dist/esm/styles/prism";
+import Link from "next/link";
 
 const ShowArticle = ({ params }) => {
   const [title, setTitle] = useState("");
@@ -64,6 +66,18 @@ const ShowArticle = ({ params }) => {
           <Typography variant="h3" align="center">
             {title}
           </Typography>
+        </Box>
+        <Box
+          my={1}
+          flexDirection="row"
+          justifyContent="flex-end"
+          display="flex"
+        >
+          <Box>
+            <IconButton component={Link} href={`/article/${id}/edit`}>
+              <EditIcon />
+            </IconButton>
+          </Box>
         </Box>
         <Box sx={{ px: 4, py: 4 }}>
           <Markdown

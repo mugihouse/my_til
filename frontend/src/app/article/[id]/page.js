@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Box, Container, Typography, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Markdown from "react-markdown";
@@ -10,11 +11,14 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { cb } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const ShowArticle = ({ params }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const { id } = params;
+
+  const router = useRouter();
 
   useEffect(() => {
     const getArticleData = async () => {
@@ -59,6 +63,31 @@ const ShowArticle = ({ params }) => {
       </SyntaxHighlighter>
     );
   };
+
+  const DeleteArticle = async () => {
+    try {
+      const res = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}` +
+          "/api/v1/articles/" +
+          `${id}`,
+        {
+          headers: {
+            uid: Cookies.get("uid"),
+            client: Cookies.get("client"),
+            "access-token": Cookies.get("access-token"),
+          },
+        }
+      );
+
+      if (!res) {
+        throw new Error("記事の削除に失敗しました");
+      }
+
+      router.push("/mypage");
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <Container component="main" maxWidth="md">
       <Box>
@@ -76,6 +105,11 @@ const ShowArticle = ({ params }) => {
           <Box>
             <IconButton component={Link} href={`/article/${id}/edit`}>
               <EditIcon />
+            </IconButton>
+          </Box>
+          <Box>
+            <IconButton onClick={() => DeleteArticle()}>
+              <DeleteIcon />
             </IconButton>
           </Box>
         </Box>

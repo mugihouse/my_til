@@ -32,7 +32,6 @@ class Api::V1::ArticlesController < ApplicationController
 
   def update
     article = Article.find(params[:id])
-
     if article.update(article_params)
       render  status: :ok
     else
@@ -51,6 +50,12 @@ class Api::V1::ArticlesController < ApplicationController
       }
       render json: article_hash, status: :ok
     end
+  end
+
+  def destroy
+    article = Article.find(params[:id])
+    article.destroy!
+    render status: :ok
   end
 
   private

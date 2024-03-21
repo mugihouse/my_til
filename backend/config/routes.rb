@@ -6,7 +6,11 @@ Rails.application.routes.draw do
         registrations: 'auth/registrations'
       }
 
-      resources :articles
+      resources :articles do
+        member do
+          get 'edit'
+        end
+      end
     end
   end
 end

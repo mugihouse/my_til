@@ -51,7 +51,7 @@ const NavBar = () => {
         </Toolbar>
       </AppBar>
       <Drawer open={open} onClose={toggleDrawer}>
-        <Sidemenu />
+        <Sidemenu open={open} setOpen={setOpen} />
       </Drawer>
     </Box>
   );

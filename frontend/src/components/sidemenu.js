@@ -5,8 +5,15 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import { useRouter } from "next/navigation";
 
-const Sidemenu = () => {
+const Sidemenu = ({ open, setOpen }) => {
+  const router = useRouter();
+
+  const ToIndexArticle = () => {
+    router.push("/article/index");
+    setOpen(!open);
+  };
   return (
     <List
       sx={{ width: 250, bgcolor: "background" }}
@@ -18,11 +25,11 @@ const Sidemenu = () => {
         </ListSubheader>
       }
     >
-      <ListItemButton>
+      <ListItemButton onClick={() => ToIndexArticle()}>
         <ListItemIcon>
           <ArticleOutlinedIcon />
         </ListItemIcon>
-        <Link href="/article/index">Index Article</Link>
+        Index Article
       </ListItemButton>
       <ListItemButton>
         <ListItemText primary="Drafts" />

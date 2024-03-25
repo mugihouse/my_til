@@ -25,3 +25,15 @@ body {
 .editor-container {
   height: 90vh;
 }
+
+/* FullCalenderオーバーラップ */
+.fc-direction-ltr .fc-daygrid-event.fc-event-end,
+.fc-event-main-frame {
+  flex-direction: column;
+  text-align: center;
+}
+
+.fc-event-desc,
+.event-title-link {
+  white-space: normal;
+}

@@ -6,11 +6,13 @@ Rails.application.routes.draw do
         registrations: 'auth/registrations'
       }
 
+      get '/articles/month_data/:date', to: 'articles#month_data'
       resources :articles do
         member do
           get 'edit'
         end
       end
+
     end
   end
 end

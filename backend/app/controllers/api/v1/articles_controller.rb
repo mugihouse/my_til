@@ -58,6 +58,20 @@ class Api::V1::ArticlesController < ApplicationController
     render status: :ok
   end
 
+  def month_data
+    date = Date.parse(params[:date])
+    month_articles = current_api_v1_user.articles.where(publish_day: date.all_month)
+    month_articles_hash = month_articles.map do |article|
+      {
+        id: article.id,
+        title: article.title,
+        start: article.publish_day,
+        allDay: true,
+      }
+    end
+    render json: month_articles_hash, status: :ok
+  end
+
   private
 
   def article_params

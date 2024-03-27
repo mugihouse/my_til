@@ -25,12 +25,12 @@ const Sidemenu = ({ open, setOpen }) => {
         </ListSubheader>
       }
     >
-      <ListItemButton onClick={() => ToIndexArticle()}>
+      {/* <ListItemButton onClick={() => ToIndexArticle()}>
         <ListItemIcon>
           <ArticleOutlinedIcon />
         </ListItemIcon>
         Index Article
-      </ListItemButton>
+      </ListItemButton> */}
       <ListItemButton>
         <ListItemText primary="Drafts" />
       </ListItemButton>

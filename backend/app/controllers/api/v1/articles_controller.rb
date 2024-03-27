@@ -1,8 +1,8 @@
 class Api::V1::ArticlesController < ApplicationController
-  before_action :authenticate_api_v1_user!
+  before_action :authenticate_api_v1_user!, except: :index
 
   def index
-    articles = Article.all
+    articles = Article.all.includes(:user).order(created_at: :desc)
     articles_hash = build_articles_array(articles)
     render json: articles_hash, status: :ok
   end
@@ -83,7 +83,7 @@ class Api::V1::ArticlesController < ApplicationController
       {
         id: article.id,
         title: article.title,
-        content: article.content,
+        name: article.user.name
       }
     end
   end

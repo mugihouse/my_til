@@ -12,6 +12,7 @@ import {
 } from "@mui/material/";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { mutate } from "swr";
 
 const Login = () => {
   const router = useRouter();
@@ -42,6 +43,9 @@ const Login = () => {
           Cookies.set("access-token", response.headers["access-token"]);
           Cookies.set("name", response.data.data.name);
           router.push("/mypage");
+          mutate(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}` + "/api/v1/authenticate"
+          );
         })
         .catch(function (error) {
           // Cookieからトークンを削除しています

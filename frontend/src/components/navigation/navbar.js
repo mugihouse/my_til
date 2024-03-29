@@ -16,11 +16,30 @@ import Sidemenu from "../sidemenu";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import useSWR, { mutate } from "swr";
 
 const NavBar = () => {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
+
+  const fetcher = async (url) => {
+    return await axios
+      .get(url, {
+        headers: {
+          uid: Cookies.get("uid"),
+          client: Cookies.get("client"),
+          "access-token": Cookies.get("access-token"),
+        },
+      })
+      .then((res) => res.data.isLoggedIn);
+  };
+  const { data } = useSWR(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}` + "/api/v1/authenticate",
+    fetcher
+  );
+
+  console.log(data);
   // サイドメニュー開閉処理
   const toggleDrawer = () => {
     setOpen(!open);
@@ -43,6 +62,7 @@ const NavBar = () => {
       Cookies.remove("client");
       Cookies.remove("access-token");
       router.push("/");
+      mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + "/api/v1/authenticate");
     } catch (err) {
       console.error(err);
       alert(err.response.data.errors);
@@ -67,21 +87,28 @@ const NavBar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href="/">MY TIL</Link>
           </Typography>
-          <Button color="inherit">
-            <Link href="/login">LOGIN</Link>
-          </Button>
-          <Button color="inherit">
-            <Link href="/sign-up">SIGNUP</Link>
-          </Button>
-          <Button color="inherit">
-            <Link href="/article/new">New Article</Link>
-          </Button>
-          <Button color="inherit">
-            <Link href="/mypage">My Page</Link>
-          </Button>
-          <Button color="inherit" onClick={handleSignOutClick}>
-            Log Out
-          </Button>
+          {data === "true" ? (
+            <>
+              <Button color="inherit">
+                <Link href="/article/new">New Article</Link>
+              </Button>
+              <Button color="inherit">
+                <Link href="/mypage">My Page</Link>
+              </Button>
+              <Button color="inherit" onClick={handleSignOutClick}>
+                Log Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button color="inherit">
+                <Link href="/login">LOGIN</Link>
+              </Button>
+              <Button color="inherit">
+                <Link href="/sign-up">SIGNUP</Link>
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer open={open} onClose={toggleDrawer}>

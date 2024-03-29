@@ -6,6 +6,8 @@ Rails.application.routes.draw do
         registrations: 'auth/registrations'
       }
 
+      get '/authenticate', to: 'authentications#authenticate'
+
       get '/articles/month_data/:date', to: 'articles#month_data'
       resources :articles do
         member do

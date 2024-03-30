@@ -39,7 +39,6 @@ const NavBar = () => {
     fetcher
   );
 
-  console.log(data);
   // サイドメニュー開閉処理
   const toggleDrawer = () => {
     setOpen(!open);

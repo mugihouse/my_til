@@ -53,7 +53,7 @@ const MyPage = () => {
           eventContent={renderEventContent}
           contentHeight={"40em"}
           events={generateEvents}
-          eventBackgroundColor="white"
+          eventBackgroundColor="rgba(0,0,0,0)"
           eventBorderColor="white"
           eventTextColor="black"
         />

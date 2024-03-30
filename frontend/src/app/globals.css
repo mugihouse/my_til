@@ -37,3 +37,8 @@ body {
 .event-title-link {
   white-space: normal;
 }
+
+.fc .fc-cell-shaded,
+.fc .fc-day-disabled {
+  background: white;
+}

@@ -34,12 +34,11 @@ const NavBar = () => {
       })
       .then((res) => res.data.isLoggedIn);
   };
-  const { data } = useSWR(
+  const { data, isLoading } = useSWR(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}` + "/api/v1/authenticate",
     fetcher
   );
 
-  console.log(data);
   // サイドメニュー開閉処理
   const toggleDrawer = () => {
     setOpen(!open);
@@ -87,7 +86,9 @@ const NavBar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href="/">MY TIL</Link>
           </Typography>
-          {data === "true" ? (
+          {isLoading ? (
+            <div></div>
+          ) : data === "true" ? (
             <>
               <Button color="inherit">
                 <Link href="/article/new">New Article</Link>

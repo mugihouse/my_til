@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Container, Typography, IconButton } from "@mui/material";
+import { Box, Container, Typography, IconButton, Table } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { cb } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Link from "next/link";
@@ -115,7 +118,9 @@ const ShowArticle = ({ params }) => {
         </Box>
         <Box sx={{ px: 4, py: 4 }}>
           <Markdown
-            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw, rehypeSanitize]}
+            remarkPlugins={[remarkGfm, remarkBreaks]}
+            className="markdown"
             components={{
               pre: Pre,
               h1: ({ children }) => (
@@ -147,6 +152,9 @@ const ShowArticle = ({ params }) => {
                 <Typography variant="h6" gutterBottom>
                   {children}
                 </Typography>
+              ),
+              p: ({ children }) => (
+                <p style={{ marginBottom: "1em" }}>{children}</p>
               ),
             }}
           >

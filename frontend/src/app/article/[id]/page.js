@@ -69,6 +69,10 @@ const ShowArticle = ({ params }) => {
 
   const DeleteArticle = async () => {
     try {
+      const confirm = window.confirm("本当に削除しますか？");
+      if (!confirm) {
+        return; // キャンセルされた場合は処理を中止
+      }
       const res = await axios.delete(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}` +
           "/api/v1/articles/" +

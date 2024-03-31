@@ -60,7 +60,7 @@ class Api::V1::ArticlesController < ApplicationController
 
   def month_data
     date = Date.parse(params[:date])
-    month_articles = current_api_v1_user.articles.where(publish_day: date.all_month)
+    month_articles = current_api_v1_user.articles.where(publish_day: (date..date.next_month))
     month_articles_hash = month_articles.map do |article|
       {
         id: article.id,

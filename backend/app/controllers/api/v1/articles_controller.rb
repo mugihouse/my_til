@@ -1,10 +1,18 @@
 class Api::V1::ArticlesController < ApplicationController
+  include Pagination
   before_action :authenticate_api_v1_user!, except: :index
 
   def index
     articles = Article.all.includes(:user).order(created_at: :desc)
-    articles_hash = build_articles_array(articles)
-    render json: articles_hash, status: :ok
+    #ページネーション指定ページ
+    paged = params[:paged]
+    #指定がない場合はデフォルトを10ページずつ（kaminari標準のlimit_valueは25）
+    per = params[:per].present? ? params[:per] : 10
+    #ページネーションが適用された投稿
+    articles_paginated = articles.page(paged).per(per)
+    pagination = pagination(articles_paginated)
+    articles_hash = build_articles_array(articles_paginated)
+    render json: {articles: articles_hash, pagination: pagination}, status: :ok
   end
 
   def create

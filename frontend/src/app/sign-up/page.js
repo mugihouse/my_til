@@ -13,15 +13,26 @@ import {
 import axios from "axios";
 import Cookies from "js-cookie";
 import { mutate } from "swr";
+import { useForm } from "react-hook-form";
 
 const SignUp = () => {
+  const defaultValues = {
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues });
+
   const router = useRouter();
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessages, setErrorMessages] = useState([]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const onSubmit = (formData) => {
     const axiosInstance = axios.create({
       baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/`,
       headers: {
@@ -30,13 +41,13 @@ const SignUp = () => {
     });
     (async () => {
       setIsError(false);
-      setErrorMessage("");
+      setErrorMessages("");
       return await axiosInstance
         .post("auth", {
-          name: data.get("name"),
-          email: data.get("email"),
-          password: data.get("password"),
-          password_confirmation: data.get("password_confirmation"),
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          password_confirmation: formData.password_confirmation,
         })
         .then(function (response) {
           // Cookieにトークンをセットしています
@@ -56,41 +67,64 @@ const SignUp = () => {
           Cookies.remove("access-token");
           Cookies.remove("name");
           setIsError(true);
-          setErrorMessage(error.response.data.errors[0]);
+          setErrorMessages(error.response.data.errors.full_messages);
+          console.log(error.response.data.errors.full_messages);
         });
     })();
   };
 
+  const onerror = (err) => console.log(err);
+
   return (
     <Container component="main" maxWidth="sm">
-      <Box>
+      <Box sx={{ pl: 2, pr: 2 }}>
         <Typography
           component="h1"
           variant="h5"
           align="center"
-          sx={{ pt: 3, mp: 2 }}
+          sx={{ pt: 6, mp: 2 }}
         >
           新規登録
         </Typography>
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit, onerror)}
           sx={{
-            marginTop: 8,
+            mt: 6,
+            pb: 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            pb: 4,
           }}
         >
+          <Box sx={{ mb: 4 }}>
+            {isError ? (
+              <Alert
+                onClose={() => {
+                  setIsError(false);
+                  setErrorMessages("");
+                }}
+                severity="error"
+              >
+                {errorMessages.map((item) => (
+                  <div key={item}>・{item}</div>
+                ))}
+              </Alert>
+            ) : null}
+          </Box>
           <TextField
             id="name"
             label="名前"
             name="name"
             variant="standard"
             autoFocus
-            required
             fullWidth
+            {...register("name", {
+              required: "名前は必須です",
+            })}
+            sx={{ mb: 2 }}
+            error={"name" in errors}
+            helperText={errors.name?.message}
           />
           <TextField
             id="email"
@@ -99,8 +133,13 @@ const SignUp = () => {
             autoComplete="email"
             variant="standard"
             autoFocus
-            required
             fullWidth
+            {...register("email", {
+              required: "メールアドレスは必須です",
+            })}
+            sx={{ mb: 2 }}
+            error={"email" in errors}
+            helperText={errors.email?.message}
           />
           <TextField
             name="password"
@@ -109,8 +148,13 @@ const SignUp = () => {
             id="password"
             autoComplete="current-password"
             variant="standard"
-            required
             fullWidth
+            {...register("password", {
+              required: "パスワードは必須です",
+            })}
+            sx={{ mb: 2 }}
+            error={"password" in errors}
+            helperText={errors.password?.message}
           />
           <TextField
             name="password_confirmation"
@@ -119,23 +163,17 @@ const SignUp = () => {
             id="password_confirmation"
             variant="standard"
             autoComplete="current-password"
-            required
             fullWidth
+            {...register("password_confirmation", {
+              required: "パスワード（確認用）は必須です",
+            })}
+            sx={{ mb: 2 }}
+            error={"password_confirmation" in errors}
+            helperText={errors.password_confirmation?.message}
           />
           <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
             登録
           </Button>
-          {isError ? (
-            <Alert
-              onClose={() => {
-                setIsError(false);
-                setErrorMessage("");
-              }}
-              severity="error"
-            >
-              {errorMessage}
-            </Alert>
-          ) : null}
         </Box>
       </Box>
     </Container>

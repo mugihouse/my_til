@@ -13,15 +13,25 @@ import {
 import axios from "axios";
 import Cookies from "js-cookie";
 import { mutate } from "swr";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
+  const defaultValues = {
+    email: "",
+    password: "",
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues });
+
   const router = useRouter();
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const onSubmit = (formData) => {
     const axiosInstance = axios.create({
       baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/`,
       headers: {
@@ -33,8 +43,8 @@ const Login = () => {
       setErrorMessage("");
       return await axiosInstance
         .post("auth/sign_in", {
-          email: data.get("email"),
-          password: data.get("password"),
+          email: formData.email,
+          password: formData.password,
         })
         .then(function (response) {
           // Cookieにトークンをセットしています
@@ -59,28 +69,43 @@ const Login = () => {
     })();
   };
 
+  const onerror = (err) => console.log(err);
+
   return (
     <Container component="main" maxWidth="sm">
-      <Box>
+      <Box sx={{ pl: 2, pr: 2 }}>
         <Typography
           component="h1"
           variant="h5"
           align="center"
-          sx={{ pt: 3, mp: 2 }}
+          sx={{ pt: 6, mp: 2 }}
         >
           ログイン
         </Typography>
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit, onerror)}
           sx={{
-            marginTop: 8,
+            mt: 6,
+            pb: 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            pb: 4,
           }}
         >
+          <Box sx={{ mb: 4 }}>
+            {isError ? (
+              <Alert
+                onClose={() => {
+                  setIsError(false);
+                  setErrorMessage("");
+                }}
+                severity="error"
+              >
+                {errorMessage}
+              </Alert>
+            ) : null}
+          </Box>
           <TextField
             id="email"
             label="メールアドレス"
@@ -88,8 +113,13 @@ const Login = () => {
             autoComplete="email"
             variant="standard"
             autoFocus
-            required
             fullWidth
+            {...register("email", {
+              required: "メールアドレスは必須です",
+            })}
+            sx={{ mb: 2 }}
+            error={"email" in errors}
+            helperText={errors.email?.message}
           />
           <TextField
             name="password"
@@ -98,23 +128,17 @@ const Login = () => {
             id="password"
             autoComplete="current-password"
             variant="standard"
-            required
             fullWidth
+            sx={{ mb: 2 }}
+            {...register("password", {
+              required: "パスワードは必須です",
+            })}
+            error={"password" in errors}
+            helperText={errors.password?.message}
           />
           <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
             ログイン
           </Button>
-          {isError ? (
-            <Alert
-              onClose={() => {
-                setIsError(false);
-                setErrorMessage("");
-              }}
-              severity="error"
-            >
-              {errorMessage}
-            </Alert>
-          ) : null}
         </Box>
       </Box>
     </Container>

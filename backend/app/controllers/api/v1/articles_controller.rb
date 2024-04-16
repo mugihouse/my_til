@@ -1,6 +1,6 @@
 class Api::V1::ArticlesController < ApplicationController
   include Pagination
-  before_action :authenticate_api_v1_user!, except: :index
+  before_action :authenticate_api_v1_user!, except: [:index, :show]
 
   def index
     articles = Article.all.includes(:user).order(created_at: :desc)
@@ -55,6 +55,7 @@ class Api::V1::ArticlesController < ApplicationController
         id: article.id,
         title: article.title,
         content: article.content,
+        author: article.user.name
       }
       render json: article_hash, status: :ok
     end

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Container, Typography, IconButton, Table } from "@mui/material";
+import { Box, Container, Typography, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -19,6 +19,8 @@ import { useRouter } from "next/navigation";
 const ShowArticle = ({ params }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [author, setAuthor] = useState("");
+  const [name, setName] = useState("");
   const { id } = params;
 
   const router = useRouter();
@@ -40,6 +42,8 @@ const ShowArticle = ({ params }) => {
         );
         setTitle(res.data.title);
         setContent(res.data.content);
+        setAuthor(res.data.author);
+        setName(Cookies.get("name"));
       } catch (error) {
         console.error(error);
       }
@@ -103,23 +107,25 @@ const ShowArticle = ({ params }) => {
             {title}
           </Typography>
         </Box>
-        <Box
-          my={1}
-          flexDirection="row"
-          justifyContent="flex-end"
-          display="flex"
-        >
-          <Box>
-            <IconButton component={Link} href={`/article/${id}/edit`}>
-              <EditIcon />
-            </IconButton>
-          </Box>
-          <Box>
+        {name === author && (
+          <Box
+            my={1}
+            flexDirection="row"
+            justifyContent="flex-end"
+            display="flex"
+          >
+            <Link href={`/article/${id}/edit`}>
+              <IconButton>
+                <EditIcon />
+              </IconButton>
+            </Link>
+
             <IconButton onClick={() => DeleteArticle()}>
               <DeleteIcon />
             </IconButton>
           </Box>
-        </Box>
+        )}
+
         <Box sx={{ px: 4, py: 4 }}>
           <Markdown
             rehypePlugins={[rehypeRaw, rehypeSanitize]}

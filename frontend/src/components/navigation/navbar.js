@@ -60,6 +60,7 @@ const NavBar = () => {
       Cookies.remove("uid");
       Cookies.remove("client");
       Cookies.remove("access-token");
+      Cookies.remove("name");
       router.push("/");
       mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + "/api/v1/authenticate");
     } catch (err) {

@@ -113,9 +113,9 @@ const NavBar = () => {
           )}
         </Toolbar>
       </AppBar>
-      <Drawer open={open} onClose={toggleDrawer}>
+      {/* <Drawer open={open} onClose={toggleDrawer}>
         <Sidemenu open={open} setOpen={setOpen} />
-      </Drawer>
+      </Drawer> */}
     </Box>
   );
 };

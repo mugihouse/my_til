@@ -73,7 +73,7 @@ const NavBar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             onClick={toggleDrawer}
             size="large"
             edge="start"
@@ -82,7 +82,7 @@ const NavBar = () => {
             sx={{ mr: 2 }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href="/">MY TIL</Link>
